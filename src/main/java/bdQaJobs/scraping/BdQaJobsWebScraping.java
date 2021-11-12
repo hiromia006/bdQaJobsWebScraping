@@ -38,7 +38,7 @@ public class BdQaJobsWebScraping {
                     .select("a");
 
             for (Element element : elements) {
-                if (element.text().trim().matches(".*(SQA|Assurance|QA|qa).*")) {
+                if (element.attr("href").trim().matches(".*(SQA|Assurance|QA|qa).*")) {
                     String jobUrl = element.attr("href").trim();
                     jobUrl = !jobUrl.contains(baseUrl) ?
                             (!jobUrl.startsWith("/") ? baseUrl + "/" + jobUrl : baseUrl + jobUrl)
