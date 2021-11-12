@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+group 'bdQaJobsWebScraping'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.jsoup:jsoup:1.14.3'
+}
+
+test{
+    // enable TestNG support (default is JUnit)
+    useTestNG();
+}
