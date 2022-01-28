@@ -41,7 +41,7 @@ public class BdQaJobsWebScraping {
                     .execute()
                     .parse()
                     .select("a");
-
+            String jobUrlWithTittle = "";
             for (Element urlElement : urlElements) {
                 if (url.contains("jobs.bdjobs.com")) {
                     if (urlElement.text().trim().matches(".*(SQA|Assurance|QA|qa|sqa).*")) {
@@ -49,7 +49,12 @@ public class BdQaJobsWebScraping {
                         jobUrl = !jobUrl.contains(baseUrl) ?
                                 (!jobUrl.startsWith("/") ? baseUrl + "/" + jobUrl : baseUrl + jobUrl)
                                 : jobUrl;
-                        jobs.add(urlElement.text().trim() + " =>> " + jobUrl);
+
+                        jobUrlWithTittle = urlElement.text().trim() + " =>> " + jobUrl;
+                        if (!saveJobs.contains(jobUrlWithTittle)) {
+                            jobs.add(jobUrlWithTittle);
+                        }
+
                     }
                 } else {
                     if (urlElement.attr("href").trim().matches(".*(SQA|Assurance|QA|qa|sqa).*")) {
@@ -57,7 +62,11 @@ public class BdQaJobsWebScraping {
                         jobUrl = !jobUrl.contains(baseUrl) ?
                                 (!jobUrl.startsWith("/") ? baseUrl + "/" + jobUrl : baseUrl + jobUrl)
                                 : jobUrl;
-                        jobs.add(urlElement.text().trim() + " =>> " + jobUrl);
+
+                        jobUrlWithTittle = urlElement.text().trim() + " =>> " + jobUrl;
+                        if (!saveJobs.contains(jobUrlWithTittle)) {
+                            jobs.add(jobUrlWithTittle);
+                        }
                     }
                 }
             }
@@ -70,11 +79,14 @@ public class BdQaJobsWebScraping {
             FileWriteAndReader.WriteFile(job);
         }
 
-        String source = projectHomeDirectory + "/src/main/resources/NewJobURL.txt";
-        String dest = projectHomeDirectory + "/src/main/resources/OldJobs.txt";
+        if (jobs.size() > 0) {
+            String source = projectHomeDirectory + "/src/main/resources/NewJobURL.txt";
+            String dest = projectHomeDirectory + "/src/main/resources/OldJobs.txt";
 
-        FileWriteAndReader.copyWithoutOverWriting(source, dest);
-        new File(source).deleteOnExit();
+            FileWriteAndReader.copyWithoutOverWriting(source, dest);
+            new File(source).deleteOnExit();
+        }
+
     }
 
 
