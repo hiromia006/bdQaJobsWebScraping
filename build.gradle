@@ -11,6 +11,12 @@ repositories {
 
 dependencies {
     implementation 'org.jsoup:jsoup:1.14.3'
+    // https://mvnrepository.com/artifact/com.restfb/restfb
+    implementation 'com.restfb:restfb:2022.1.0'
+    // https://mvnrepository.com/artifact/commons-io/commons-io
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
+
 }
 
 test{

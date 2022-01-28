@@ -1,11 +1,14 @@
 package bdQaJobs.scraping;
 
+import bdQaJobs.util.FileWriteAndReader;
+import org.apache.commons.io.FileUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -15,6 +18,9 @@ import java.util.Set;
 
 public class BdQaJobsWebScraping {
     public static void main(String[] args) throws IOException {
+        Set<String> jobs = new HashSet<>();
+        Set<String> saveJobs = FileWriteAndReader.getSaveJobs();
+
         // Read text from file.
         String projectHomeDirectory = System.getProperty("user.dir");
         FileReader fr = new FileReader(projectHomeDirectory + "/src/main/resources/urls.txt");
@@ -31,26 +37,41 @@ public class BdQaJobsWebScraping {
             }
 
 
-            Set<String> jobs = new HashSet<>();
-            Elements elements = connection
+            Elements urlElements = connection
                     .execute()
                     .parse()
                     .select("a");
 
-            for (Element element : elements) {
-                if (element.text().trim().matches(".*(SQA|Assurance|QA|qa).*")) {
-                    String jobUrl = element.attr("href").trim();
-                    jobUrl = !jobUrl.contains(baseUrl) ?
-                            (!jobUrl.startsWith("/") ? baseUrl + "/" + jobUrl : baseUrl + jobUrl)
-                            : jobUrl;
-                    jobs.add(element.text().trim() + " =>> " + jobUrl);
+            for (Element urlElement : urlElements) {
+                if (url.contains("jobs.bdjobs.com")) {
+                    if (urlElement.text().trim().matches(".*(SQA|Assurance|QA|qa|sqa).*")) {
+                        String jobUrl = urlElement.attr("href").trim();
+                        jobUrl = !jobUrl.contains(baseUrl) ?
+                                (!jobUrl.startsWith("/") ? baseUrl + "/" + jobUrl : baseUrl + jobUrl)
+                                : jobUrl;
+                        jobs.add(urlElement.text().trim() + " =>> " + jobUrl);
+                    }
+                } else {
+                    if (urlElement.attr("href").trim().matches(".*(SQA|Assurance|QA|qa|sqa).*")) {
+                        String jobUrl = urlElement.attr("href").trim();
+                        jobUrl = !jobUrl.contains(baseUrl) ?
+                                (!jobUrl.startsWith("/") ? baseUrl + "/" + jobUrl : baseUrl + jobUrl)
+                                : jobUrl;
+                        jobs.add(urlElement.text().trim() + " =>> " + jobUrl);
+                    }
                 }
-
             }
-
-            jobs.forEach(System.out::println);
-
         }
+
+        for (String job : jobs) {
+            FileWriteAndReader.WriteFile(job);
+        }
+
+        String source = projectHomeDirectory + "/src/main/resources/NewJobURL.txt";
+        String dest = projectHomeDirectory + "/src/main/resources/OldJobs.txt";
+
+        FileWriteAndReader.copyWithoutOverWriting(source, dest);
+        new File(source).deleteOnExit();
     }
 
 
