@@ -61,6 +61,9 @@ public class BdQaJobsWebScraping {
                     }
                 }
             }
+
+            jobs.forEach(System.out::println);
+
         }
 
         for (String job : jobs) {
