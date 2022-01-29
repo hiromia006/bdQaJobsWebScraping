@@ -1,7 +1,6 @@
 package bdQaJobs.scraping;
 
 import bdQaJobs.util.FileWriteAndReader;
-import org.apache.commons.io.FileUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
@@ -36,7 +35,6 @@ public class BdQaJobsWebScraping {
                         .cookie("JOBSRPP", "60");
             }
 
-
             Elements urlElements = connection
                     .execute()
                     .parse()
@@ -54,7 +52,6 @@ public class BdQaJobsWebScraping {
                         if (!saveJobs.contains(jobUrlWithTittle)) {
                             jobs.add(jobUrlWithTittle);
                         }
-
                     }
                 } else {
                     if (urlElement.attr("href").trim().matches(".*(SQA|Assurance|QA|qa|sqa).*")) {

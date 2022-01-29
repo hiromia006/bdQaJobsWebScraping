@@ -2,6 +2,18 @@ plugins {
     id 'java'
 }
 
+plugins {
+    id "application"
+}
+apply plugin: "java"
+ext {
+    javaMainClass = "bdQaJobs.scraping.BdQaJobsWebScraping"
+}
+
+application {
+    mainClassName = javaMainClass
+}
+
 group 'bdQaJobsWebScraping'
 version '1.0-SNAPSHOT'
 
@@ -19,7 +31,7 @@ dependencies {
 
 }
 
-test{
+test {
     // enable TestNG support (default is JUnit)
     useTestNG();
 }
