@@ -48,7 +48,7 @@ public class FileWriteAndReader {
             BufferedReader br = new BufferedReader(fr);
             String st;
             while ((st = br.readLine()) != null) {
-                if (st.length() > 0) {
+                if (st.length() > 0 && st.contains("http")) {
                     jobUrls.add(st);
                 }
 

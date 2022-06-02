@@ -41,7 +41,7 @@ public class BdQaJobsWebScraping {
                     .select("a");
             String jobUrlWithTittle = "";
             for (Element urlElement : urlElements) {
-                if (url.contains("jobs.bdjobs.com")) {
+                if (url.contains("bdjobs.com")) {
                     if (urlElement.text().trim().matches(".*(SQA|Assurance|QA|qa|sqa).*")) {
                         String jobUrl = urlElement.attr("href").trim();
                         jobUrl = !jobUrl.contains(baseUrl) ?
@@ -71,17 +71,15 @@ public class BdQaJobsWebScraping {
             jobs.forEach(System.out::println);
 
         }
-
+        String source = projectHomeDirectory + "/src/main/resources/NewJobURL.txt";
         for (String job : jobs) {
+            new File(source).deleteOnExit();
             FileWriteAndReader.WriteFile(job);
         }
 
         if (jobs.size() > 0) {
-            String source = projectHomeDirectory + "/src/main/resources/NewJobURL.txt";
             String dest = projectHomeDirectory + "/src/main/resources/OldJobs.txt";
-
             FileWriteAndReader.copyWithoutOverWriting(source, dest);
-            new File(source).deleteOnExit();
         }
 
     }
